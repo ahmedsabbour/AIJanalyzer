@@ -1,0 +1,5 @@
+{
+  "name": "AI Job Automation Analyzer",
+  "description": "An application that analyzes job descriptions to determine their potential for automation by an AI agent and suggests a possible automation workflow.",
+  "requestFramePermissions": []
+}

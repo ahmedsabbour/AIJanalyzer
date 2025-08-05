@@ -6,7 +6,6 @@ import { GoogleGenAI, Type } from "@google/genai";
 // This check runs when the function is initialized on the server.
 // It's a server-side file, so process.env is secure and private.
 if (!process.env.API_KEY) {
-    // This will cause the function to fail deployment if the key is not set.
     throw new Error("CRITICAL: API_KEY environment variable is not set.");
 }
 
@@ -61,25 +60,9 @@ export async function POST(request: Request) {
                 temperature: 0.2,
             },
         });
-        
-        // Robust check for a valid response from the Gemini API
-        if (!response || !response.candidates || response.candidates.length === 0) {
-            console.error("Gemini API returned no candidates. Full Response:", JSON.stringify(response, null, 2));
-            const blockReason = response?.promptFeedback?.blockReason;
-            const errorMessage = blockReason
-                ? `Request was blocked by the API. Reason: ${blockReason}`
-                : "The AI model did not return a valid response. This might be a temporary issue or a problem with the prompt.";
 
-            return new Response(JSON.stringify({ error: errorMessage }), {
-                status: 500,
-                headers: { 'Content-Type': 'application/json' },
-            });
-        }
-        
-        const jsonText = response.text?.trim();
-
+        const jsonText = response.text.trim();
         if (!jsonText) {
-             console.error("Gemini API returned empty text. Full response:", JSON.stringify(response, null, 2));
              return new Response(JSON.stringify({ error: "The API returned an empty response. The job description might be too complex or ambiguous." }), {
                 status: 500,
                 headers: { 'Content-Type': 'application/json' },

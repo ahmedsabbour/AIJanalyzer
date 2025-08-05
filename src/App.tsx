@@ -84,8 +84,11 @@ const App: React.FC = () => {
           )}
         </main>
         
-        <footer className="text-center mt-8 text-gray-500 text-sm">
+        <footer className="text-center mt-8 text-gray-500 text-sm space-y-1">
             <p>Powered by Google Gemini</p>
+            <p>
+                All rights reserved to <a href="https://nrg-digital.com" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-300 transition-colors">Nrg Digital</a>
+            </p>
         </footer>
       </div>
     </div>

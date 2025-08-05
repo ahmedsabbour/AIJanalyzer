@@ -17,18 +17,20 @@ export const analyzeJobDescription = async (jobDescription: string): Promise<Ana
         });
 
         if (!response.ok) {
-            let errorMessage = `API request failed with status ${response.status}`;
+            let errorMessage;
+            // Try to get a specific error message from the JSON response body.
             try {
-                // Try to parse a more specific error message from the backend.
                 const errorBody = await response.json();
-                if (errorBody.error) {
-                    errorMessage = errorBody.error;
-                }
+                errorMessage = errorBody.error || `Server responded with status ${response.status}`;
             } catch (e) {
-                // The response body was not JSON or was empty. The status text is a good fallback.
-                errorMessage = response.statusText;
+                // If the response isn't JSON, it's likely a fatal server error (e.g., crash, timeout).
+                if (response.status === 500) {
+                    errorMessage = "A critical server error occurred. This could be due to a misconfiguration (like a missing API key) on the server. Please check your project's environment variables on Vercel and the function logs for details.";
+                } else {
+                    errorMessage = `An unexpected error occurred. Server responded with status: ${response.status}`;
+                }
             }
-            throw new Error(`Server error: ${errorMessage}`);
+            throw new Error(errorMessage);
         }
 
         const result: AnalysisResultData = await response.json();
@@ -40,15 +42,15 @@ export const analyzeJobDescription = async (jobDescription: string): Promise<Ana
             typeof result.analysisSummary !== 'string' ||
             !Array.isArray(result.automationFlow)
         ) {
-            throw new Error("Received malformed data structure from the server.");
+            throw new Error("Received malformed data from the server.");
         }
 
         return result;
 
     } catch (error) {
-        console.error("Error calling analysis API endpoint:", error);
-        // Re-throw a user-friendly error to be displayed in the UI.
-        const errorMessage = error instanceof Error ? error.message : "An unknown communication error occurred.";
-        throw new Error(`Failed to analyze job description. Details: ${errorMessage}`);
+        console.error("Error in analyzeJobDescription:", error);
+        // Re-throw the error to be handled by the UI component.
+        // The message is already formatted, so we don't need to wrap it.
+        throw error;
     }
 };

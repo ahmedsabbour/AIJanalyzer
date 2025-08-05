@@ -26,7 +26,7 @@ const App: React.FC = () => {
       setAnalysisResult(result);
     } catch (e) {
       const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred.';
-      setError(`Failed to analyze the job description. ${errorMessage}`);
+      setError(errorMessage);
       console.error(e);
     } finally {
       setIsLoading(false);

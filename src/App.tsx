@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { AnalysisResultData } from './types';
 import { analyzeJobDescription } from './services/geminiService';
 import JobInputForm from './components/JobInputForm';
@@ -14,7 +15,7 @@ const App: React.FC = () => {
 
   const handleAnalysis = useCallback(async () => {
     if (!jobDescription.trim()) {
-      setError('Job description cannot be empty.');
+      setError('Input cannot be empty. Please paste a job description or a URL.');
       return;
     }
     setIsLoading(true);
@@ -42,6 +43,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-neutral-dark text-neutral-light flex flex-col items-center p-4 sm:p-6 lg:p-8 font-sans">
+      <Analytics />
       <div className="w-full max-w-4xl mx-auto">
         <header className="text-center mb-8">
           <div className="flex justify-center items-center gap-4 mb-2">
@@ -51,7 +53,7 @@ const App: React.FC = () => {
             </h1>
           </div>
           <p className="text-lg text-gray-400">
-            Paste a job description below to see if an AI agent could take over.
+            Paste a job description or a link to a job posting to see if an AI agent could take over.
           </p>
         </header>
 
@@ -85,7 +87,7 @@ const App: React.FC = () => {
         </main>
         
         <footer className="text-center mt-8 text-gray-500 text-sm space-y-1">
-            <p>Powered by Google Gemini</p>
+            <p>Powered by Google Gemini with Web Analysis</p>
             <p>
                 All rights reserved to <a href="https://nrg-digital.com" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-300 transition-colors">Nrg Digital</a>
             </p>

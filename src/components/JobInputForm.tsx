@@ -24,7 +24,7 @@ const JobInputForm: React.FC<JobInputFormProps> = ({
       <textarea
         value={jobDescription}
         onChange={(e) => onJobDescriptionChange(e.target.value)}
-        placeholder="e.g., The Customer Service Representative will be responsible for responding to customer inquiries via email and phone, resolving issues, and providing information about our products..."
+        placeholder="e.g., Paste a job description or a URL like https://jobs.example.com/software-engineer..."
         className="w-full h-64 p-4 bg-neutral-dark text-gray-300 border-2 border-gray-600 rounded-lg focus:ring-2 focus:ring-brand-accent focus:border-brand-accent transition-colors duration-300 resize-y"
         disabled={isLoading}
       />
@@ -33,7 +33,7 @@ const JobInputForm: React.FC<JobInputFormProps> = ({
         disabled={isLoading || !jobDescription.trim()}
         className="w-full flex items-center justify-center gap-2 bg-brand-accent hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 disabled:bg-gray-600 disabled:cursor-not-allowed transform hover:scale-105 disabled:transform-none"
       >
-        Analyze Job
+        Analyze
       </button>
     </form>
   );

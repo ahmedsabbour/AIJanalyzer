@@ -1,6 +1,6 @@
 import React from 'react';
 import { AnalysisResultData } from '../types';
-import { CheckCircleIcon, XCircleIcon, ArrowRightIcon } from './icons';
+import { CheckCircleIcon, XCircleIcon, ArrowRightIcon, LinkIcon } from './icons';
 
 interface AnalysisResultProps {
   result: AnalysisResultData;
@@ -57,13 +57,37 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset }) => {
           </ol>
         </div>
       )}
+
+      {result.sources && result.sources.length > 0 && (
+        <div>
+          <h3 className="text-xl font-semibold mb-4 text-white flex items-center gap-2">
+            <LinkIcon className="w-5 h-5" />
+            Sources
+          </h3>
+          <ul className="space-y-2">
+            {result.sources.map((source, index) => (
+              <li key={index} className="text-gray-400 truncate">
+                <a
+                  href={source.uri}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={source.title}
+                  className="text-brand-accent hover:underline"
+                >
+                  {source.title || source.uri}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       
       <div className="text-center pt-4 border-t border-gray-700">
         <button
           onClick={onReset}
           className="bg-brand-accent hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-300 flex items-center gap-2 mx-auto"
         >
-          Analyze Another Job <ArrowRightIcon className="w-5 h-5" />
+          Analyze Another <ArrowRightIcon className="w-5 h-5" />
         </button>
       </div>
     </div>

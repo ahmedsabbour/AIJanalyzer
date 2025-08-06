@@ -36,11 +36,18 @@ export const analyzeJobDescription = async (jobDescription: string): Promise<Ana
         const result: AnalysisResultData = await response.json();
         
         // Client-side validation to ensure the data from the server is in the expected format.
+        const hasSources = 'sources' in result;
+        const sourcesAreValid = !hasSources || (
+            Array.isArray(result.sources) &&
+            result.sources.every(s => typeof s === 'object' && s !== null && 'uri' in s && 'title' in s)
+        );
+
         if (
             typeof result.isReplaceable !== 'boolean' ||
             typeof result.replacementConfidence !== 'number' ||
             typeof result.analysisSummary !== 'string' ||
-            !Array.isArray(result.automationFlow)
+            !Array.isArray(result.automationFlow) ||
+            !sourcesAreValid
         ) {
             throw new Error("Received malformed data from the server.");
         }
